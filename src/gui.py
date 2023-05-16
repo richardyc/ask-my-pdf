@@ -305,23 +305,23 @@ def output_add(q,a):
 	ss['output'] = new + ss['output']
 
 # LAYOUT
-
-# with st.sidebar:
-# 	ui_info()
-# 	ui_spacer(2)
-# 	with st.expander('advanced'):
-# 		ui_show_debug()
-# 		b_clear()
-# 		ui_model()
-# 		ui_fragments()
-# 		ui_fix_text()
-# 		ui_hyde()
-# 		ui_hyde_summary()
-# 		ui_temperature()
-# 		b_reload()
-# 		ui_task_template()
-# 		ui_task()
-# 		ui_hyde_prompt()
+st.set_option('deprecation.showPyplotGlobalUse', False)
+with st.sidebar:
+	ui_info()
+	ui_spacer(2)
+	with st.expander('advanced'):
+		ui_show_debug()
+		b_clear()
+		ui_model()
+		ui_fragments()
+		ui_fix_text()
+		ui_hyde()
+		ui_hyde_summary()
+		ui_temperature()
+		b_reload()
+		ui_task_template()
+		ui_task()
+		ui_hyde_prompt()
 
 ui_api_key()
 ui_pdf_file()
