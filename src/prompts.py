@@ -4,7 +4,7 @@
 
 TASK = {
 	'v6': (
-			"Answer the question truthfully based on the text below. "
+			"Answer the question truthfully in Chinese based on the text below. "
 			"Include verbatim quote and a comment where to find it in the text (page number). "
 			#"After the quote write a step by step explanation in a new paragraph. "
 			"After the quote write a step by step explanation. "
@@ -12,7 +12,7 @@ TASK = {
 			#"After that try to rephrase the original question so it might give better results. " 
 		),
 	'v5': (
-			"Answer the question truthfully based on the text below. "
+			"Answer the question truthfully in Chinese based on the text below. "
 			"Include at least one verbatim quote (marked with quotation marks) and a comment where to find it in the text (ie name of the section and page number). "
 			"Use ellipsis in the quote to omit irrelevant parts of the quote. "
 			"After the quote write (in the new paragraph) a step by step explanation to be sure we have the right answer "
@@ -34,10 +34,10 @@ TASK = {
 		# "If different fragments refer to different entities with the same name, write separate answer for each entity.",
 }
 
-HYDE = "Write an example answer to the following question. Don't write generic answer, just assume everything that is not known."
+HYDE = "Write an example answer in Chinese to the following question. Don't write generic answer, just assume everything that is not known."
 
 # TODO
 SUMMARY = {
-	'v2':'Describe the document from which the fragment is extracted. Omit any details.',
-	'v1':'Describe the document from which the fragment is extracted. Do not describe the fragment, focus on figuring out what kind document it is.',
+	'v2':'Describe the document in Chinese from which the fragment is extracted. Omit any details.',
+	'v1':'Describe the document in Chinese from which the fragment is extracted. Do not describe the fragment, focus on figuring out what kind document it is.',
 }

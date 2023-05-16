@@ -46,6 +46,8 @@ def on_api_key_change():
 ss['community_user'] = os.getenv('COMMUNITY_USER')
 if 'user' not in ss and ss['community_user']:
 	on_api_key_change() # use community key
+if 'api_key' not in ss:
+	on_api_key_change() # use default key
 
 # COMPONENTS
 
@@ -79,22 +81,23 @@ def ui_info():
 	st.markdown('Source code can be found [here](https://github.com/mobarski/ask-my-pdf).')
 
 def ui_api_key():
-	if ss['community_user']:
-		st.write('## 1. Optional - enter your OpenAI API key')
-		t1,t2 = st.tabs(['community version','enter your own API key'])
-		with t1:
-			pct = model.community_tokens_available_pct()
-			st.write(f'Community tokens available: :{"green" if pct else "red"}[{int(pct)}%]')
-			st.progress(pct/100)
-			st.write('Refresh in: ' + model.community_tokens_refresh_in())
-			st.write('You can sign up to OpenAI and/or create your API key [here](https://platform.openai.com/account/api-keys)')
-			ss['community_pct'] = pct
-			ss['debug']['community_pct'] = pct
-		with t2:
-			st.text_input('OpenAI API key', type='password', key='api_key', on_change=on_api_key_change, label_visibility="collapsed")
-	else:
-		st.write('## 1. Enter your OpenAI API key')
-		st.text_input('OpenAI API key', type='password', key='api_key', on_change=on_api_key_change, label_visibility="collapsed")
+	pass
+	# if ss['community_user']:
+	# 	st.write('## 1. Optional - enter your OpenAI API key')
+	# 	# t1,t2 = st.tabs(['community version','enter your own API key'])
+	# 	# with t1:
+	# 	# 	pct = model.community_tokens_available_pct()
+	# 	# 	st.write(f'Community tokens available: :{"green" if pct else "red"}[{int(pct)}%]')
+	# 	# 	st.progress(pct/100)
+	# 	# 	st.write('Refresh in: ' + model.community_tokens_refresh_in())
+	# 	# 	st.write('You can sign up to OpenAI and/or create your API key [here](https://platform.openai.com/account/api-keys)')
+	# 	# 	ss['community_pct'] = pct
+	# 	# 	ss['debug']['community_pct'] = pct
+	# 	# with t2:
+	# 	st.text_input('OpenAI API key', type='password', key='api_key', on_change=on_api_key_change, label_visibility="collapsed")
+	# else:
+	# 	st.write('## 1. Enter your OpenAI API key')
+	# 	st.text_input('OpenAI API key', type='password', key='api_key', on_change=on_api_key_change, label_visibility="collapsed")
 
 def index_pdf_file():
 	if ss['pdf_file']:
@@ -121,7 +124,7 @@ def debug_index():
 
 def ui_pdf_file():
 	st.write('## 2. Upload or select your PDF file')
-	disabled = not ss.get('user') or (not ss.get('api_key') and not ss.get('community_pct',0))
+	disabled = False
 	t1,t2 = st.tabs(['UPLOAD','SELECT'])
 	with t1:
 		st.file_uploader('pdf file', type='pdf', key='pdf_file', disabled=disabled, on_change=index_pdf_file, label_visibility="collapsed")
@@ -217,13 +220,13 @@ def b_ask():
 		ss['feedback_score'] = ss['feedback'].get_score()
 	score = ss.get('feedback_score',0)
 	c5.write(f'feedback score: {score}')
-	c4.checkbox('send details', True, key='send_details',
+	c4.checkbox('send details', False, key='send_details',
 			help='allow question and the answer to be stored in the ask-my-pdf feedback database')
 	#c1,c2,c3 = st.columns([1,3,1])
 	#c2.radio('zzz',['👍',r'...',r'👎'],horizontal=True,label_visibility="collapsed")
 	#
-	disabled = (not ss.get('api_key') and not ss.get('community_pct',0)) or not ss.get('index')
-	if c1.button('get answer', disabled=disabled, type='primary', use_container_width=True):
+	# disabled = (not ss.get('api_key') and not ss.get('community_pct',0)) or not ss.get('index')
+	if c1.button('get answer', disabled=False, type='primary', use_container_width=True):
 		question = ss.get('question','')
 		temperature = ss.get('temperature', 0.0)
 		hyde = ss.get('use_hyde')
@@ -280,10 +283,10 @@ def b_save():
 	name = ss.get('filename')
 	api_key = ss.get('api_key')
 	disabled = not api_key or not db or not index or not name
-	help = "The file will be stored for about 90 days. Available only when using your own API key."
-	if st.button('save encrypted index in ask-my-pdf', disabled=disabled, help=help):
-		with st.spinner('saving to ask-my-pdf'):
-			db.put(name, index)
+	# help = "The file will be stored for about 90 days. Available only when using your own API key."
+	# if st.button('save encrypted index in ask-my-pdf', disabled=disabled, help=help):
+	# 	with st.spinner('saving to ask-my-pdf'):
+	# 		db.put(name, index)
 
 def b_delete():
 	db = ss.get('storage')
@@ -303,22 +306,22 @@ def output_add(q,a):
 
 # LAYOUT
 
-with st.sidebar:
-	ui_info()
-	ui_spacer(2)
-	with st.expander('advanced'):
-		ui_show_debug()
-		b_clear()
-		ui_model()
-		ui_fragments()
-		ui_fix_text()
-		ui_hyde()
-		ui_hyde_summary()
-		ui_temperature()
-		b_reload()
-		ui_task_template()
-		ui_task()
-		ui_hyde_prompt()
+# with st.sidebar:
+# 	ui_info()
+# 	ui_spacer(2)
+# 	with st.expander('advanced'):
+# 		ui_show_debug()
+# 		b_clear()
+# 		ui_model()
+# 		ui_fragments()
+# 		ui_fix_text()
+# 		ui_hyde()
+# 		ui_hyde_summary()
+# 		ui_temperature()
+# 		b_reload()
+# 		ui_task_template()
+# 		ui_task()
+# 		ui_hyde_prompt()
 
 ui_api_key()
 ui_pdf_file()

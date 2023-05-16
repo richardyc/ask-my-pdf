@@ -15,7 +15,7 @@ def set_user(user):
 	openai.add_callback('after', stats_callback)
 
 def complete(text, **kw):
-	model = kw.get('model','gpt-3.5-turbo')
+	model = 'gpt-4'
 	llm = openai.model(model)
 	llm.config['pre_prompt'] = 'output only in raw text' # for chat models
 	resp = llm.complete(text, **kw)
